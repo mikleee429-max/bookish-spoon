@@ -6,7 +6,12 @@ const ASSETS = [
   '/css/animations.css',
   '/css/responsive.css',
   '/js/main.js',
-  '/js/games/sudoku.js'
+  '/js/games/sudoku.js',
+  '/js/games/tictactoe.js',
+  '/js/games/minesweeper.js',
+  '/js/games/chess.js',
+  '/js/games/checkers.js',
+  '/js/games/battleship.js'
 ];
 
 self.addEventListener('install', (event) => {
