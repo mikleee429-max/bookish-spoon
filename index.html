@@ -43,7 +43,7 @@
             <main class="content">
                 <section id="profile" class="page active">
                     <div class="card">
-                        <div class="avatar">👤</div>
+                        <div class="avatar" id="profile-avatar">👤</div>
                         <div class="profile-name">Игрок</div>
                         <div class="profile-id" id="profile-id">0</div>
                     </div>
@@ -54,30 +54,19 @@
                     </div>
                 </section>
 
+                <!-- PvP: placeholder -->
                 <section id="pvp" class="page">
                     <div class="card">
-                        <h3>Создать комнату</h3>
-                        <div class="game-grid">
-                            <button class="game-tile" data-game="minesweeper">💣 Сапёр</button>
-                            <button class="game-tile" data-game="sudoku">🔢 Судоку</button>
-                            <button class="game-tile" data-game="tictactoe">⭕ Крестики-нолики</button>
-                            <button class="game-tile" data-game="chess">♟️ Шахматы</button>
-                            <button class="game-tile" data-game="checkers">⚫ Шашки</button>
-                            <button class="game-tile" data-game="battleship">🚢 Морской бой</button>
-                        </div>
-                        <div class="inputs-row">
-                            <div class="input-card"><label>Ширина</label><input id="width" value="9"></div>
-                            <div class="input-card"><label>Высота</label><input id="height" value="9"></div>
-                            <div class="input-card"><label>Мины</label><input id="mines" value="10"></div>
-                        </div>
-                        <button id="create-room" class="cta">Создать комнату</button>
+                        <h3>ПВП</h3>
+                        <p style="font-size:18px; text-align:center; padding:24px 0;">Ждите, скоро...</p>
                     </div>
+                </section>
+
+                <!-- Tournaments: placeholder -->
+                <section id="tournaments" class="page">
                     <div class="card">
-                        <h4>Присоединиться к комнате</h4>
-                        <div class="join-row">
-                            <input id="join-code" placeholder="Введите код комнаты">
-                            <button id="join-room" class="small-cta">Войти</button>
-                        </div>
+                        <h3>Турниры</h3>
+                        <p style="font-size:18px; text-align:center; padding:24px 0;">Ждите, скоро...</p>
                     </div>
                 </section>
 
@@ -97,12 +86,60 @@
                     </div>
                 </section>
 
-                <section id="sudoku" class="page game-page"></section>
-                <section id="tictactoe" class="page game-page"></section>
-                <section id="minesweeper" class="page game-page"></section>
-                <section id="chess" class="page game-page"></section>
-                <section id="checkers" class="page game-page"></section>
-                <section id="battleship" class="page game-page"></section>
+                <!-- Game pages: each contains a Play vs Robot button and a container for the game instance -->
+                <section id="sudoku" class="page game-page">
+                    <div class="card">
+                        <h3>Судоку</h3>
+                        <p class="info-text">Мини‑игра Судоку</p>
+                        <button class="cta play-vs-robot" data-game="sudoku">Играть против робота</button>
+                    </div>
+                    <div class="card game-instance" id="sudoku-instance"></div>
+                </section>
+
+                <section id="tictactoe" class="page game-page">
+                    <div class="card">
+                        <h3>Крестики‑нолики</h3>
+                        <p class="info-text">Мини‑игра Крестики‑нолики</p>
+                        <button class="cta play-vs-robot" data-game="tictactoe">Играть против робота</button>
+                    </div>
+                    <div class="card game-instance" id="tictactoe-instance"></div>
+                </section>
+
+                <section id="minesweeper" class="page game-page">
+                    <div class="card">
+                        <h3>Сапёр</h3>
+                        <p class="info-text">Мини‑игра Сапёр</p>
+                        <button class="cta play-vs-robot" data-game="minesweeper">Играть против робота</button>
+                    </div>
+                    <div class="card game-instance" id="minesweeper-instance"></div>
+                </section>
+
+                <section id="chess" class="page game-page">
+                    <div class="card">
+                        <h3>Шахматы</h3>
+                        <p class="info-text">Мини‑игра Шахматы</p>
+                        <button class="cta play-vs-robot" data-game="chess">Играть против робота</button>
+                    </div>
+                    <div class="card game-instance" id="chess-instance"></div>
+                </section>
+
+                <section id="checkers" class="page game-page">
+                    <div class="card">
+                        <h3>Шашки</h3>
+                        <p class="info-text">Мини‑игра Шашки</p>
+                        <button class="cta play-vs-robot" data-game="checkers">Играть против робота</button>
+                    </div>
+                    <div class="card game-instance" id="checkers-instance"></div>
+                </section>
+
+                <section id="battleship" class="page game-page">
+                    <div class="card">
+                        <h3>Морской бой</h3>
+                        <p class="info-text">Мини‑игра Морской бой</p>
+                        <button class="cta play-vs-robot" data-game="battleship">Играть против робота</button>
+                    </div>
+                    <div class="card game-instance" id="battleship-instance"></div>
+                </section>
             </main>
         </div>
     </div>

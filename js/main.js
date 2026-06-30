@@ -4,6 +4,7 @@ class FuzzyEngine {
     this.storage = new StorageManager();
     this.currentPage = 'profile';
     this.currentGame = null;
+    this.currentGameInstance = null;
     this.init();
   }
 
@@ -19,25 +20,22 @@ class FuzzyEngine {
       btn.addEventListener('click', (e) => this.navigateTo(e.currentTarget.dataset.page));
     });
 
-    const saveBtn = document.getElementById('save-profile-btn');
-    if (saveBtn) saveBtn.addEventListener('click', () => this.saveProfile());
-
-    const changeAvatar = document.getElementById('change-avatar-btn');
-    if (changeAvatar) changeAvatar.addEventListener('click', () => this.showAvatarSelector());
-
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => this.setTheme(e.currentTarget.dataset.theme));
+    // Play vs robot buttons inside game pages
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest && e.target.closest('.play-vs-robot');
+      if (btn) {
+        const game = btn.dataset.game;
+        this.startVsRobot(game);
+      }
     });
 
-    const sound = document.getElementById('sound-toggle');
-    if (sound) sound.addEventListener('change', (e) => { this.storage.updateSettings({ sound: e.target.checked }); });
-
-    document.querySelectorAll('.pvp-game-btn, .game-tile').forEach(btn => {
-      btn.addEventListener('click', (e) => this.selectPVPGame(e.currentTarget.dataset.game, e.currentTarget));
-    });
-
-    document.querySelectorAll('.difficulty-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => this.selectDifficulty(e.currentTarget.dataset.difficulty, e.currentTarget));
+    document.querySelectorAll('.game-tile').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const game = e.currentTarget.dataset.game;
+        this.navigateTo(game);
+        // open game page and load instance when tile clicked
+        this.loadGame(game);
+      });
     });
 
     const createRoomBtn = document.getElementById('create-room');
@@ -46,9 +44,9 @@ class FuzzyEngine {
     const joinBtn = document.getElementById('join-room');
     if (joinBtn) joinBtn.addEventListener('click', () => this.joinTournament());
 
-    document.querySelectorAll('.shop-tab-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => this.switchShopTab(e.currentTarget.dataset.tab));
-    });
+    // theme select
+    const themeSelect = document.getElementById('theme-select');
+    if (themeSelect) themeSelect.addEventListener('change', (e) => this.setTheme(e.target.value));
   }
 
   navigateTo(page) {
@@ -70,6 +68,8 @@ class FuzzyEngine {
     if (ageEl) ageEl.value = profile.age || '';
     const idEl = document.getElementById('profile-id');
     if (idEl) idEl.textContent = profile.id || '';
+    const avatarEl = document.getElementById('profile-avatar');
+    if (avatarEl) avatarEl.textContent = profile.avatar || '👤';
     this.updateStats();
   }
 
@@ -98,17 +98,46 @@ class FuzzyEngine {
 
   setTheme(theme) { document.body.className = `theme-${theme}`; this.storage.updateSettings({ theme }); }
 
-  selectPVPGame(game, node) {
-    if (!game) return;
-    document.querySelectorAll('.game-tile').forEach(t => t.classList.remove('active'));
-    if (node) node.classList.add('active');
-    this.showNotification(`Выбрана игра: ${game}`);
+  startVsRobot(gameName) {
+    // load game instance into its container and pass vs: 'robot' option if supported
+    this.navigateTo(gameName);
+    this.loadGame(gameName, { vs: 'robot' });
+    this.showNotification(`Запуск ${gameName} против робота`);
   }
 
-  selectDifficulty(difficulty, node) {
-    if (!difficulty) return;
-    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
-    if (node) node.classList.add('active');
+  loadGame(gameName, options = {}) {
+    if (!gameName) return;
+    const section = document.getElementById(gameName);
+    if (!section) return;
+    const container = section.querySelector('.game-instance') || section;
+    // clear previous instance
+    container.innerHTML = '';
+    // Map game name to class
+    const map = {
+      sudoku: 'Sudoku',
+      tictactoe: 'TicTacToe',
+      minesweeper: 'Minesweeper',
+      chess: 'Chess',
+      checkers: 'Checkers',
+      battleship: 'Battleship'
+    };
+    const className = map[gameName];
+    if (!className || typeof window[className] !== 'function') {
+      // no implementation available
+      container.innerHTML = '<div class="card"><p>Игра пока не реализована. Скоро обновление.</p></div>';
+      return;
+    }
+
+    try {
+      // instantiate game if constructor supports container and options
+      const GameClass = window[className];
+      // Some game constructors expect (container, options)
+      const instance = new GameClass(container, options);
+      this.currentGameInstance = instance;
+    } catch (e) {
+      console.error('Ошибка при загрузке игры', e);
+      container.innerHTML = '<div class="card"><p>Ошибка при запуске игры.</p></div>';
+    }
   }
 
   createTournament() { this.showNotification('Комната создана (демо)'); }
@@ -119,7 +148,10 @@ class FuzzyEngine {
   closeModal(){}
 
   showNotification(message){
+    // lightweight notification: console + brief floating message
     console.log('NOTIFY:',message);
+    const n = document.createElement('div'); n.textContent = message; n.style.position='fixed'; n.style.right='16px'; n.style.top='16px'; n.style.background='linear-gradient(90deg,#7b5cff,#ff5b9d)'; n.style.color='#fff'; n.style.padding='8px 12px'; n.style.borderRadius='8px'; n.style.zIndex=9999; document.body.appendChild(n);
+    setTimeout(()=>n.remove(),2000);
   }
 
   loadSettings(){ const settings = this.storage.getSettings(); document.body.className = `theme-${settings.theme || 'dark'}` }
