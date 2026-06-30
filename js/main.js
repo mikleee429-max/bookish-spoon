@@ -1,18 +1,24 @@
-// Main Application - fixed event handling and safer DOM access
+// Main Application - fixed event handling, service worker registration, deterministic loader
 class FuzzyEngine {
   constructor() {
     this.storage = new StorageManager();
     this.currentPage = 'profile';
     this.currentGame = null;
     this.currentGameInstance = null;
+    this._loadingFallbackTimer = null;
     this.init();
   }
 
   init() {
-    this.setupEventListeners();
-    this.loadSettings();
-    this.simulateLoading();
-    this.loadProfile();
+    try {
+      this.setupEventListeners();
+      this.loadSettings();
+      this.simulateLoading();
+      this.loadProfile();
+      this.registerServiceWorker();
+    } catch (e) {
+      console.error('Init error', e);
+    }
   }
 
   setupEventListeners() {
@@ -159,7 +165,50 @@ class FuzzyEngine {
   simulateLoading(){
     const prog = document.getElementById('loading-progress');
     const txt = document.getElementById('loading-text');
-    let val=0; const interval=setInterval(()=>{ val+=Math.random()*30; if(val>100)val=100; if(prog)prog.style.width=val+'%'; if(txt)txt.textContent='Загрузка: '+Math.floor(val)+'%'; if(val>=100){ clearInterval(interval); setTimeout(()=>{ document.getElementById('loading-screen')?.classList.add('hidden'); document.getElementById('main-app')?.classList.remove('hidden'); },400); } },400);
+    let val=0; 
+    const step = () => {
+      try{
+        val += Math.random()*30;
+        if(val>100) val=100;
+        if(prog) prog.style.width = val+'%';
+        if(txt) txt.textContent = 'Загрузка: '+Math.floor(val)+'%';
+        if(val>=100){
+          finalize();
+          return;
+        }
+        // schedule next
+        setTimeout(step, 350 + Math.random()*200);
+      }catch(e){ console.error('Loading step error', e); finalize(); }
+    };
+    const finalize = () => {
+      try{
+        document.getElementById('loading-screen')?.classList.add('hidden');
+        document.getElementById('main-app')?.classList.remove('hidden');
+        if (this._loadingFallbackTimer) { clearTimeout(this._loadingFallbackTimer); this._loadingFallbackTimer = null; }
+      }catch(e){ console.error('Finalize loading error', e); }
+    };
+
+    // start stepping
+    step();
+
+    // fallback: ensure loader hides after max 8s
+    this._loadingFallbackTimer = setTimeout(() => {
+      try{
+        // force complete progress
+        if(prog) prog.style.width = '100%';
+        if(txt) txt.textContent = 'Загрузка: 100%';
+        finalize();
+      }catch(e){ console.error('Fallback hide error', e); finalize(); }
+    }, 8000);
+  }
+
+  async registerServiceWorker(){
+    try{
+      if('serviceWorker' in navigator){
+        await navigator.serviceWorker.register('/sw.js');
+        console.log('Service worker registered');
+      }
+    }catch(e){ console.warn('SW registration failed', e); }
   }
 }
 
