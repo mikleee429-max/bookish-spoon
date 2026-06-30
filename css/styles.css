@@ -1,0 +1,63 @@
+/* Minimalist theme based on provided mockups */
+:root{
+  --bg1:#0f0723;
+  --bg2:#2c0f3d;
+  --card:rgba(255,255,255,0.03);
+  --muted:rgba(255,255,255,0.6);
+  --accent1:#7b5cff;
+  --accent2:#ff5b9d;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#fff;background:linear-gradient(180deg,var(--bg1),var(--bg2));-webkit-font-smoothing:antialiased}
+.hidden{display:none}
+/* Loading */
+.loading-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.loading-inner{text-align:center}
+.loading-inner .logo{font-size:28px;font-weight:700;margin-bottom:20px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.loading-bar{width:320px;height:8px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;margin:12px auto}
+.loading-progress{height:100%;width:0;background:linear-gradient(90deg,var(--accent1),var(--accent2));transition:width .4s ease}
+.loading-text{opacity:0.9;margin-top:8px}
+
+/* App layout */
+.app{min-height:100vh;display:flex;flex-direction:column}
+.app-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px}
+.app-title{font-weight:700}
+.icon-btn{background:transparent;border:none;color:#fff;font-size:18px}
+.app-body{display:flex;gap:16px;padding:0 16px 32px}
+.sidebar{width:88px}
+.sidebar nav{display:flex;flex-direction:column;gap:8px}
+.nav-btn{background:transparent;border:none;color:var(--muted);padding:12px;border-radius:10px;cursor:pointer}
+.nav-btn.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff}
+
+.content{flex:1;max-width:760px;margin:0 auto}
+.page{display:none}
+.page.active{display:block}
+.card{background:var(--card);padding:16px;border-radius:var(--radius);margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,0.5)}
+.avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,var(--accent1),var(--accent2));font-size:32px;margin-bottom:8px}
+.profile-name{font-size:18px;font-weight:700}
+.profile-id{font-size:12px;opacity:.85}
+.stats{display:flex;gap:12px;justify-content:space-between}
+.stat{color:var(--muted)}
+
+/* Game tiles */
+.game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.game-tile{background:rgba(255,255,255,0.02);border:none;padding:12px;border-radius:12px;color:var(--muted);font-weight:600;cursor:pointer}
+.game-tile.active{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff}
+
+.inputs-row{display:flex;gap:8px;margin:12px 0}
+.input-card{flex:1;background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;text-align:center}
+.input-card input{width:100%;background:transparent;border:none;color:#fff;font-size:16px;text-align:center}
+
+.cta{width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;font-weight:700;cursor:pointer}
+.small-cta{padding:8px 12px;border-radius:8px;border:none;background:linear-gradient(90deg,var(--accent1),#9b5bff);color:#fff;cursor:pointer}
+.join-row{display:flex;gap:8px}
+.join-row input{flex:1;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.02);color:#fff}
+
+.shop-grid{display:grid;grid-template-columns:1fr;gap:12px}
+
+/* Responsive */
+@media(min-width:900px){.content{max-width:420px}}
+
+/* small tweaks */
+.game-page{min-height:300px}

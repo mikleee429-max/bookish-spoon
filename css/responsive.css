@@ -1,0 +1,7 @@
+@media (max-width:600px){
+  .app-body{flex-direction:column;padding:0 12px}
+  .sidebar{display:flex;width:100%;overflow:auto}
+  .sidebar nav{flex-direction:row;gap:6px}
+  .content{padding:0 6px}
+  .loading-bar{width:260px}
+}

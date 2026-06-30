@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Fuzzy Engine - минималистичные мини-игры">
+    <meta name="theme-color" content="#7b5cff">
+    <title>Fuzzy Engine</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div id="loading-screen" class="loading-screen" role="status" aria-label="Загрузка приложения">
+        <div class="loading-inner">
+            <div class="logo">Игры разума</div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            <div class="loading-text" id="loading-text">Загрузка: 0%</div>
+        </div>
+    </div>
+
+    <div id="main-app" class="app hidden">
+        <header class="app-header">
+            <div class="app-title">Игры разума</div>
+            <div class="app-actions">
+                <button id="open-shop" class="icon-btn">🛍️</button>
+            </div>
+        </header>
+
+        <div class="app-body">
+            <aside class="sidebar">
+                <nav>
+                    <button class="nav-btn active" data-page="profile">Профиль</button>
+                    <button class="nav-btn" data-page="pvp">ПВП</button>
+                    <button class="nav-btn" data-page="shop">Магазин</button>
+                    <button class="nav-btn" data-page="settings">Настройки</button>
+                </nav>
+            </aside>
+
+            <main class="content">
+                <section id="profile" class="page active">
+                    <div class="card">
+                        <div class="avatar">👤</div>
+                        <div class="profile-name">Игрок</div>
+                        <div class="profile-id" id="profile-id">0</div>
+                    </div>
+                    <div class="card stats">
+                        <div class="stat">Побед <span id="stat-wins">0</span></div>
+                        <div class="stat">Ничьих <span id="stat-draws">0</span></div>
+                        <div class="stat">Поражений <span id="stat-losses">0</span></div>
+                    </div>
+                </section>
+
+                <section id="pvp" class="page">
+                    <div class="card">
+                        <h3>Создать комнату</h3>
+                        <div class="game-grid">
+                            <button class="game-tile" data-game="minesweeper">💣 Сапёр</button>
+                            <button class="game-tile" data-game="sudoku">🔢 Судоку</button>
+                            <button class="game-tile" data-game="tictactoe">⭕ Крестики-нолики</button>
+                            <button class="game-tile" data-game="chess">♟️ Шахматы</button>
+                            <button class="game-tile" data-game="checkers">⚫ Шашки</button>
+                            <button class="game-tile" data-game="battleship">🚢 Морской бой</button>
+                        </div>
+                        <div class="inputs-row">
+                            <div class="input-card"><label>Ширина</label><input id="width" value="9"></div>
+                            <div class="input-card"><label>Высота</label><input id="height" value="9"></div>
+                            <div class="input-card"><label>Мины</label><input id="mines" value="10"></div>
+                        </div>
+                        <button id="create-room" class="cta">Создать комнату</button>
+                    </div>
+                    <div class="card">
+                        <h4>Присоединиться к комнате</h4>
+                        <div class="join-row">
+                            <input id="join-code" placeholder="Введите код комнаты">
+                            <button id="join-room" class="small-cta">Войти</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="shop" class="page">
+                    <div class="card">
+                        <h3>Магазин</h3>
+                        <div class="shop-grid" id="shop-content"></div>
+                    </div>
+                </section>
+
+                <section id="settings" class="page">
+                    <div class="card">
+                        <h3>Настройки</h3>
+                        <label class="setting">Тема
+                            <select id="theme-select"><option value="dark">Тёмная</option><option value="light">Светлая</option></select>
+                        </label>
+                    </div>
+                </section>
+
+                <section id="sudoku" class="page game-page"></section>
+                <section id="tictactoe" class="page game-page"></section>
+                <section id="minesweeper" class="page game-page"></section>
+                <section id="chess" class="page game-page"></section>
+                <section id="checkers" class="page game-page"></section>
+                <section id="battleship" class="page game-page"></section>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/games/sudoku.js"></script>
+    <script src="js/games/tictactoe.js"></script>
+    <script src="js/games/minesweeper.js"></script>
+    <script src="js/games/chess.js"></script>
+    <script src="js/games/checkers.js"></script>
+    <script src="js/games/battleship.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
